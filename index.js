@@ -3,27 +3,30 @@ import dotenv from "dotenv";
 dotenv.config();
 const PORT = process.env.PORT || 3300;
 
-import errorHandler from "./middlewares/errorHandler";
-import invalidRoute from "./middlewares/invalidRoute";
-import logAuthUsers from "./middlewares/logAuthUsers";
+import errorHandler from "./middlewares/errorHandler.js";
+import invalidRoute from "./middlewares/invalidRoute.js";
+import logAuthUsers from "./middlewares/logAuthUsers.js";
 
-import connectToMongoDB from "./config/mongodb.config";
+import connectToDB from "./config/mongodb.config.js";
 
 import express from "express";
-import authRouter from "./routes/authRoutes";
+
+import authRouter from "./routes/authRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
 const app = express();
 
 // Connect to mongoDB
-connectToMongoDB();
+connectToDB();
 
-// Express Middlewares
+// Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
 // Custom Middlewares
 app.use(errorHandler);

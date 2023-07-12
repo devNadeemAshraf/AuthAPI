@@ -1,14 +1,33 @@
-import mongoose from "mongoose";
-import expressAsyncHandler from "express-async-handler";
+import { MongoClient, ServerApiVersion } from "mongodb";
+import dotenv from "dotenv";
+dotenv.config();
 
-// Export our MongoDB Connection
-// We cal always add in more code if needed for db config
-export const connectToMongoDB = expressAsyncHandler(async () => {
-  try {
-    return await mongoose.connect(process.env.MONGO_URI).then(() => {
-      console.log("MongoDB Connected");
-    });
-  } catch (error) {
-    throw new Error(error);
-  }
+const uri = process.env.MONGO_URI;
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
 });
+
+async function connectToDB() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
+  } catch (err) {
+    console.log(err);
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+
+export default connectToDB;
