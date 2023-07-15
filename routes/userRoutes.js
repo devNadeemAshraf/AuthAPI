@@ -1,19 +1,17 @@
 import express from "express";
-
+import authMiddleware from "../middlewares/authMiddleware.js";
 import {
   handleGetAllUser,
-  handleGetUser,
   handleGetUserProfile,
   handleUpdateUserProfile,
 } from "../controllers/userController.js";
 
 const router = express.Router();
 
-router.get("/", handleGetAllUser);
-router.get("/:userId", handleGetUser);
+router.get("/", authMiddleware, handleGetAllUser);
 router
-  .route("/profile/:userId")
-  .get(handleGetUserProfile)
-  .post(handleUpdateUserProfile);
+  .route("/:userID")
+  .get(authMiddleware, handleGetUserProfile)
+  .post(authMiddleware, handleUpdateUserProfile);
 
 export default router;

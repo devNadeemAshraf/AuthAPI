@@ -1,5 +1,5 @@
 import fs from "fs";
-const logAuthUserFilePath = "../logs/authUsers.txt";
+const logAuthUserFilePath = "../logs/authUsers.json";
 
 // Create a logger to maintain the list of users that joined on per day basis
 // This should include
